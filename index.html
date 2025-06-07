@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal PDF Converter</title>
+    <link rel="shortcut icon" href="logo.png.jpeg" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-file-pdf"></i> Universal PDF Converter</h1>
+            <p>Convert, merge, split, and compress PDF files with ease</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="merge"><i class="fas fa-object-group"></i> Merge PDF</button>
+            <button class="tab-btn" data-tab="split"><i class="fas fa-cut"></i> Split PDF</button>
+            <button class="tab-btn" data-tab="compress"><i class="fas fa-compress-alt"></i> Compress PDF</button>
+            <button class="tab-btn" data-tab="word"><i class="fas fa-file-word"></i> Word to PDF</button>
+            <button class="tab-btn" data-tab="ppt"><i class="fas fa-file-powerpoint"></i> PPT to PDF</button>
+            <button class="tab-btn" data-tab="excel"><i class="fas fa-file-excel"></i> Excel to PDF</button>
+            <button class="tab-btn" data-tab="image"><i class="fas fa-file-image"></i> Image to PDF</button>
+            <button class="tab-btn" data-tab="html"><i class="fas fa-code"></i> HTML to PDF</button>
+        </div>
+
+        <div class="tab-content active" id="merge">
+            <div class="upload-area" id="merge-upload">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Upload PDF files to merge</h3>
+                <p>Drag & drop PDF files here or click to browse</p>
+                <input type="file" id="merge-files" accept=".pdf" multiple>
+                <div class="file-list" id="merge-file-list"></div>
+            </div>
+            <button id="merge-btn" class="action-btn" disabled><i class="fas fa-object-group"></i> Merge PDFs</button>
+            <div class="download-area" id="merge-download" style="display: none;">
+                <h3>Your merged PDF is ready!</h3>
+                <a id="merge-download-link" class="download-btn" href="#"><i class="fas fa-download"></i> Download Merged PDF</a>
+            </div>
+        </div>
+
+        <div class="tab-content" id="split">
+            <div class="upload-area" id="split-upload">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Upload PDF to split</h3>
+                <p>Drag & drop a PDF file here or click to browse</p>
+                <input type="file" id="split-file" accept=".pdf">
+            </div>
+            <div class="options" id="split-options" style="display: none;">
+                <h3>Split Options</h3>
+                <div class="option-group">
+                    <label><input type="radio" name="split-method" value="range" checked> Split by page range</label>
+                    <div id="range-options">
+                        <p>Enter page ranges (e.g., 1-3,5-7) or single pages (e.g., 1,3,5)</p>
+                        <input type="text" id="page-ranges" placeholder="1-3,5-7">
+                    </div>
+                </div>
+                <div class="option-group">
+                    <label><input type="radio" name="split-method" value="every"> Split every <input type="number" id="split-every" min="1" value="1"> pages</label>
+                </div>
+            </div>
+            <button id="split-btn" class="action-btn" disabled><i class="fas fa-cut"></i> Split PDF</button>
+            <div class="download-area" id="split-download" style="display: none;">
+                <h3>Your split PDFs are ready!</h3>
+                <div id="split-download-links"></div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="compress">
+            <div class="upload-area" id="compress-upload">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Upload PDF to compress</h3>
+                <p>Drag & drop a PDF file here or click to browse</p>
+                <input type="file" id="compress-file" accept=".pdf">
+            </div>
+            <div class="options" id="compress-options" style="display: none;">
+                <h3>Compression Level</h3>
+                <div class="option-group">
+                    <label><input type="radio" name="compression-level" value="low" checked> Low (better quality)</label>
+                    <label><input type="radio" name="compression-level" value="medium"> Medium (balanced)</label>
+                    <label><input type="radio" name="compression-level" value="high"> High (smaller file)</label>
+                </div>
+                <div class="file-info">
+                    <p>Original size: <span id="original-size">0 MB</span></p>
+                </div>
+            </div>
+            <button id="compress-btn" class="action-btn" disabled><i class="fas fa-compress-alt"></i> Compress PDF</button>
+            <div class="download-area" id="compress-download" style="display: none;">
+                <h3>Your compressed PDF is ready!</h3>
+                <div class="file-info">
+                    <p>Original size: <span id="original-size-display">0 MB</span></p>
+                    <p>Compressed size: <span id="compressed-size">0 MB</span> (<span id="reduction">0%</span> reduction)</p>
+                </div>
+                <a id="compress-download-link" class="download-btn" href="#"><i class="fas fa-download"></i> Download Compressed PDF</a>
+            </div>
+        </div>
+
+        <div class="tab-content" id="word">
+            <div class="upload-area" id="word-upload">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Upload Word document</h3>
+                <p>Drag & drop DOC/DOCX file here or click to browse</p>
+                <input type="file" id="word-file" accept=".doc,.docx">
+            </div>
+            <button id="word-btn" class="action-btn" disabled><i class="fas fa-file-export"></i> Convert to PDF</button>
+            <div class="download-area" id="word-download" style="display: none;">
+                <h3>Your PDF is ready!</h3>
+                <a id="word-download-link" class="download-btn" href="#"><i class="fas fa-download"></i> Download PDF</a>
+            </div>
+        </div>
+
+        <div class="tab-content" id="ppt">
+            <div class="upload-area" id="ppt-upload">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Upload PowerPoint presentation</h3>
+                <p>Drag & drop PPT/PPTX file here or click to browse</p>
+                <input type="file" id="ppt-file" accept=".ppt,.pptx">
+            </div>
+            <button id="ppt-btn" class="action-btn" disabled><i class="fas fa-file-export"></i> Convert to PDF</button>
+            <div class="download-area" id="ppt-download" style="display: none;">
+                <h3>Your PDF is ready!</h3>
+                <a id="ppt-download-link" class="download-btn" href="#"><i class="fas fa-download"></i> Download PDF</a>
+            </div>
+        </div>
+
+        <div class="tab-content" id="excel">
+            <div class="upload-area" id="excel-upload">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Upload Excel spreadsheet</h3>
+                <p>Drag & drop XLS/XLSX file here or click to browse</p>
+                <input type="file" id="excel-file" accept=".xls,.xlsx">
+            </div>
+            <button id="excel-btn" class="action-btn" disabled><i class="fas fa-file-export"></i> Convert to PDF</button>
+            <div class="download-area" id="excel-download" style="display: none;">
+                <h3>Your PDF is ready!</h3>
+                <a id="excel-download-link" class="download-btn" href="#"><i class="fas fa-download"></i> Download PDF</a>
+            </div>
+        </div>
+
+        <div class="tab-content" id="image">
+            <div class="upload-area" id="image-upload">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Upload images</h3>
+                <p>Drag & drop JPG/PNG files here or click to browse</p>
+                <input type="file" id="image-files" accept="image/*" multiple>
+                <div class="file-list" id="image-file-list"></div>
+            </div>
+            <div class="options" id="image-options">
+                <h3>Options</h3>
+                <div class="option-group">
+                    <label>Page size: 
+                        <select id="image-page-size">
+                            <option value="a4">A4</option>
+                            <option value="letter">Letter</option>
+                            <option value="a3">A3</option>
+                            <option value="a5">A5</option>
+                            <option value="fit">Fit to image</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="option-group">
+                    <label>Orientation: 
+                        <select id="image-orientation">
+                            <option value="portrait">Portrait</option>
+                            <option value="landscape">Landscape</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="option-group">
+                    <label>Margin: 
+                        <select id="image-margin">
+                            <option value="10">Small (10mm)</option>
+                            <option value="20" selected>Medium (20mm)</option>
+                            <option value="30">Large (30mm)</option>
+                            <option value="0">None</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <button id="image-btn" class="action-btn" disabled><i class="fas fa-file-export"></i> Convert to PDF</button>
+            <div class="download-area" id="image-download" style="display: none;">
+                <h3>Your PDF is ready!</h3>
+                <a id="image-download-link" class="download-btn" href="#"><i class="fas fa-download"></i> Download PDF</a>
+            </div>
+        </div>
+
+        <div class="tab-content" id="html">
+            <div class="upload-area" id="html-upload">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Upload HTML file or enter URL</h3>
+                <p>Drag & drop HTML file here or click to browse</p>
+                <input type="file" id="html-file" accept=".html,.htm">
+                <div class="or-divider">OR</div>
+                <input type="text" id="html-url" placeholder="Enter website URL (e.g., https://example.com)">
+            </div>
+            <div class="options" id="html-options">
+                <h3>Options</h3>
+                <div class="option-group">
+                    <label>Page size: 
+                        <select id="html-page-size">
+                            <option value="a4">A4</option>
+                            <option value="letter" selected>Letter</option>
+                            <option value="a3">A3</option>
+                            <option value="a5">A5</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="option-group">
+                    <label>Orientation: 
+                        <select id="html-orientation">
+                            <option value="portrait">Portrait</option>
+                            <option value="landscape">Landscape</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="option-group">
+                    <label>Margin: 
+                        <select id="html-margin">
+                            <option value="10">Small (10mm)</option>
+                            <option value="20" selected>Medium (20mm)</option>
+                            <option value="30">Large (30mm)</option>
+                            <option value="0">None</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <button id="html-btn" class="action-btn" disabled><i class="fas fa-file-export"></i> Convert to PDF</button>
+            <div class="download-area" id="html-download" style="display: none;">
+                <h3>Your PDF is ready!</h3>
+                <a id="html-download-link" class="download-btn" href="#"><i class="fas fa-download"></i> Download PDF</a>
+            </div>
+        </div>
+
+        <div class="loading-overlay" id="loading-overlay">
+            <div class="loading-spinner"></div>
+            <p id="loading-text">Processing your file...</p>
+        </div>
+    </div>
+
+    <!-- JS Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.8.2/docx.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.0/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pptxgenjs/3.11.0/pptxgen.min.js"></script>
+    
+    <!-- Main JS -->
+    <script src="script.js"></script>
+</body>
+</html>
